@@ -9,7 +9,7 @@ import (
 //var SimulationDate carbon.Carbon
 
 type Engine struct {
-	SimulationDate carbon.Carbon `json:"simulation_date"`
+	SimulationDate carbon.Carbon `json:"simulation_date" carbon:"type:date" tz:"Europe/London"`
 	ElapsedSeconds int           `json:"elapsed_seconds"`
 	gameYearLength int
 	onUpdate       func(float64)
