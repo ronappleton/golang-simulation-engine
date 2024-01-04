@@ -19,7 +19,7 @@ func main() {
 
 	simulation := engine.New("2023-01-01", realtime.OneHour, func(delta float64) {
 		// Do stuff with your simulation
-    }, true)
+	}, true)
 
 	simulation.Start()
 
@@ -31,4 +31,5 @@ func main() {
 		}
 	}
 }
+
 ```
