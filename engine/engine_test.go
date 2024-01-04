@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ronappleton/golang-simulation-engine/engine"
 	"github.com/stretchr/testify/assert"
-	"golang-simulation-engine/engine"
 )
 
 func TestEngineStartStop(t *testing.T) {
-	// Initialize the engine with a start date, game year length, an update function, and debug mode disabled
+	// Initialize the engine with a start SimulationDate, game year length, an update function, and debug mode disabled
 	startDate := "2023-01-01"
 	gameYearLength := 1000000 // 1 second in microseconds
 	var updateFuncCalled bool
@@ -35,7 +35,7 @@ func TestEngineStartStop(t *testing.T) {
 }
 
 func TestEngineDebugInfo(t *testing.T) {
-	// Initialize the engine with a start date, game year length, an update function, and debug mode enabled
+	// Initialize the engine with a start SimulationDate, game year length, an update function, and debug mode enabled
 	startDate := "2023-01-01"
 	gameYearLength := 1000000 // 1 second in microseconds
 	updateFunc := func(delta float64) {}
@@ -52,12 +52,12 @@ func TestEngineDebugInfo(t *testing.T) {
 	out, _ := ioutil.ReadAll(r)
 	os.Stdout = old // Reset stdout
 
-	// Verify that debug information contains the expected date format
-	assert.Contains(t, string(out), "date:", "Debug info should contain date information")
+	// Verify that debug information contains the expected SimulationDate format
+	assert.Contains(t, string(out), "SimulationDate:", "Debug info should contain SimulationDate information")
 }
 
 func TestDateIncrementation(t *testing.T) {
-	// Initialize the engine with a start date, game year length, an update function, and debug mode disabled
+	// Initialize the engine with a start SimulationDate, game year length, an update function, and debug mode disabled
 	startDate := "2023-01-01"
 	gameYearLength := 1000000 // 1 second in microseconds
 	updateFunc := func(delta float64) {}
@@ -75,15 +75,15 @@ func TestDateIncrementation(t *testing.T) {
 	// Wait for the engine to finish
 	time.Sleep(runDuration + 500*time.Millisecond)
 
-	// Increment the start date by gameYearLength microseconds to compare
+	// Increment the start SimulationDate by gameYearLength microseconds to compare
 	expectedDate := engine.New(startDate, gameYearLength, updateFunc, false).Date().AddMicroseconds(int(runDuration / time.Microsecond))
 
-	// Check if the date incremented correctly
+	// Check if the SimulationDate incremented correctly
 	assert.Equal(t, expectedDate.ToDateString(), eng.Date().ToDateString(), "Date should be incremented correctly")
 }
 
 func TestElapsedTimeCalculation(t *testing.T) {
-	// Initialize the engine with a start date, game year length, an update function, and debug mode disabled
+	// Initialize the engine with a start SimulationDate, game year length, an update function, and debug mode disabled
 	startDate := "2023-01-01"
 	gameYearLength := 1000000 // 1 second in microseconds
 	updateFunc := func(delta float64) {}
@@ -101,7 +101,7 @@ func TestElapsedTimeCalculation(t *testing.T) {
 	// Wait for the engine to finish
 	time.Sleep(runDuration + 500*time.Millisecond)
 
-	// Check if the elapsed time matches the expected duration
+	// Check if the ElapsedSeconds time matches the expected duration
 	assert.Equal(t, int(runDuration/time.Second), eng.Elapsed(), "Elapsed time should match the run duration")
 }
 
@@ -114,7 +114,7 @@ func TestNewEnginePanicHandling(t *testing.T) {
 		}
 	}()
 
-	// Simulate incorrect start date format causing a panic
+	// Simulate incorrect start SimulationDate format causing a panic
 	startDate := "2023/01/01" // Incorrect format (should be "Y-m-d")
 
 	// Initialize the engine (expecting a panic)

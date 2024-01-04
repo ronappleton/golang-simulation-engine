@@ -6,12 +6,12 @@ import (
 	gameLoop "github.com/kutase/go-gameloop"
 )
 
-//var date carbon.Carbon
+//var SimulationDate carbon.Carbon
 
 type Engine struct {
-	date           carbon.Carbon
+	SimulationDate carbon.Carbon `json:"simulation_date"`
+	ElapsedSeconds int           `json:"elapsed_seconds"`
 	gameYearLength int
-	elapsed        int
 	onUpdate       func(float64)
 	loop           *gameLoop.GameLoop
 	debug          bool
@@ -28,9 +28,9 @@ func New(startDate string, gameYearLength int, onUpdate func(float64), debug boo
 	date := carbon.ParseByFormat(startDate, "Y-m-d", "Europe/London")
 
 	return &Engine{
-		date:           date,
+		SimulationDate: date,
 		gameYearLength: gameYearLength,
-		elapsed:        0,
+		ElapsedSeconds: 0,
 		onUpdate:       onUpdate,
 		debug:          debug,
 	}
@@ -38,8 +38,8 @@ func New(startDate string, gameYearLength int, onUpdate func(float64), debug boo
 
 func (e *Engine) Start() {
 	gl := gameLoop.New(1, func(delta float64) {
-		e.date = e.date.AddMicroseconds(e.gameYearLength)
-		e.elapsed++
+		e.SimulationDate = e.SimulationDate.AddMicroseconds(e.gameYearLength)
+		e.ElapsedSeconds++
 		e.onUpdate(delta)
 		if e.debug {
 			e.PrintDebugInfo()
@@ -56,13 +56,13 @@ func (e *Engine) Stop() {
 }
 
 func (e *Engine) PrintDebugInfo() {
-	fmt.Printf("date: %s, elapsed: %d\n", e.date.ToDateString(), e.elapsed)
+	fmt.Printf("SimulationDate: %s, ElapsedSeconds: %d\n", e.SimulationDate.ToDateString(), e.ElapsedSeconds)
 }
 
 func (e *Engine) Date() carbon.Carbon {
-	return e.date
+	return e.SimulationDate
 }
 
 func (e *Engine) Elapsed() int {
-	return e.elapsed
+	return e.ElapsedSeconds
 }
