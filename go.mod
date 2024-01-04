@@ -1,4 +1,4 @@
-module golang-simulation-engine
+module github.com/ronappleton/golang-simulation-engine
 
 go 1.22rc1
 
